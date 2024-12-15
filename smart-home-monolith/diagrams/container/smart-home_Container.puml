@@ -5,8 +5,8 @@ top to bottom direction
 
 !includeurl https://raw.githubusercontent.com/RicardoNiepel/C4-PlantUML/master/C4_Component.puml
 
-Person(user, "User", "A user of the fitness club system")
-System(SmartHomeSystem, "Smart Home", "System managing memberships, schedules, and payments")
+Person(user, "Пользователь", "Пользователь системы Smart House")
+System(SmartHomeSystem, "Smart Home", "")
 
 Container_Boundary(SmartHomeSystem, "Smart Home") {
   Container(WebApp, "Web Application", "Java, Spring", "Веб-приложение")
@@ -40,24 +40,47 @@ Container_Boundary(SmartHomeSystem, "Smart Home") {
 
 }
 
+System_Ext(HeatingSystem, "Устройства отопления", "Управляемое отопительное оборудование")
+System_Ext(TemperatureSensor, "Телеметрия", "Датчики приборов")
+System_Ext(DoorSystem, "Ворота", "Приборы управление воротами")
+System_Ext(LightSystem, "Свет", "Приборы управление светом")
+System_Ext(VideoSystem, "Видеонаблюдением", "Система видеонаблюдения")
+
 Rel(user, WebApp, "Uses the system")
 Rel(WebApp, Kafka,"")
 Rel(Kafka, WebApp, "")
 
+Rel(HeatService, WebApp,"")
+Rel(HeatMonitoring,WebApp,"")
+Rel(DoorsService,WebApp,"")
+Rel(LightService,WebApp,"")
+Rel(VideoService, WebApp,"")
+
 Rel(HeatService, Kafka,"")
-Rel(Kafka,HeatDatabase,"")
+Rel(HeatService, HeatDatabase,"")
+Rel(HeatDatabase, HeatService,"")
 
 Rel(HeatMonitoring, Kafka,"")
-Rel(Kafka,TelemetryDatabase,"")
+Rel(HeatMonitoring, TelemetryDatabase,"")
+Rel(TelemetryDatabase, HeatMonitoring,"")
 
 Rel(DoorsService, Kafka,"")
-Rel(Kafka,DoorsDatabase,"")
+Rel(DoorsService, DoorsDatabase,"")
+Rel(DoorsDatabase, DoorsService,"")
 
 Rel(LightService, Kafka,"")
-Rel(Kafka,LightDatabase,"")
+Rel(LightService, LightDatabase,"")
+Rel(LightDatabase, LightService,"")
 
 Rel(VideoService, Kafka,"")
-Rel(Kafka,VideoDatabase,"")
+Rel(VideoService, VideoDatabase,"")
+Rel(VideoDatabase, VideoService,"")
 
+
+Rel(WebApp, LightSystem, "")
+Rel(WebApp, VideoSystem,"")
+Rel( WebApp, DoorSystem,,"")
+Rel(TemperatureSensor, WebApp,"")
+Rel(WebApp, HeatingSystem,"")
 
 @enduml
